@@ -36,10 +36,10 @@ class MainActivity : AppCompatActivity() {
         }
         audioRecord = AudioRecord(
             MediaRecorder.AudioSource.MIC,
-            10000,
+            8000,
             AudioFormat.CHANNEL_IN_MONO,
             AudioFormat.ENCODING_PCM_16BIT,
-            AudioRecord.getMinBufferSize(10000, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT)
+            AudioRecord.getMinBufferSize(8000, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT)
         )
 
         // Start recording
@@ -55,9 +55,24 @@ class MainActivity : AppCompatActivity() {
                 val voltage = (buffer[0] + buffer[1]) / 2.0
 
                 // Update the TextView
+
+               /* val voltageFormatted = String.format("%.5f", voltage)
                 runOnUiThread {
-                    textView.text = "Voltage: $voltage"
+                    textView.text = "Voltage: $voltageFormatted"
                 }
+*/
+
+
+                val voltageMicro = voltage / 1000000 // تبدیل ولت به میکرو ولت
+                val formattedVoltageMicro = String.format("%.5f", voltageMicro) // قالب‌بندی با دقت پنج رقم اعشار
+                runOnUiThread {
+                    textView.text = "Voltage: $formattedVoltageMicro μV"
+                }
+
+                /*
+                runOnUiThread {
+                    textView.text = "Voltage: ${voltage/1000000}"
+                }*/
             }
         }.start()
     }
